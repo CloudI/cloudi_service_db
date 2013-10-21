@@ -76,9 +76,9 @@
 
 -record(state,
     {
-        tables = cloudi_x_trie:new() :: cloudi_x_trie:trie(),
+        tables = trie:new() :: trie:trie(),
         prefix_length :: integer(),
-        uuid_generator :: cloudi_x_uuid:state(),
+        uuid_generator :: uuid:state(),
         table_module :: atom(),
         output_type :: internal | external,
         endian :: big | little | native,
@@ -317,7 +317,7 @@ key_value({new, [I | _] = Table, Value},
         _ ->
             Value
     end,
-    NewTables = cloudi_x_trie:update(TableName, fun(Old) ->
+    NewTables = trie:update(TableName, fun(Old) ->
             TableModule:store(TransId, NewValue, Old)
         end, TableModule:store(TransId, NewValue, TableModule:new()), Tables),
     {reply,
@@ -328,7 +328,7 @@ key_value({delete, [I | _] = Table},
           #state{tables = Tables} = State)
     when is_integer(I) ->
     TableName = Database ++ [$* | Table],
-    NewTables = cloudi_x_trie:erase(TableName, Tables),
+    NewTables = trie:erase(TableName, Tables),
     {reply,
      response(Request, ok, State),
      State#state{tables = NewTables}};
@@ -338,7 +338,7 @@ key_value({delete, [I | _] = Table, Key},
                  table_module = TableModule} = State)
     when is_integer(I) ->
     TableName = Database ++ [$* | Table],
-    NewTables = cloudi_x_trie:update(TableName, fun(Old) ->
+    NewTables = trie:update(TableName, fun(Old) ->
             TableModule:erase(Key, Old)
         end, TableModule:new(), Tables),
     {reply,
@@ -350,7 +350,7 @@ key_value({get, [I | _] = Table},
                  table_module = TableModule} = State)
     when is_integer(I) ->
     TableName = Database ++ [$* | Table],
-    case cloudi_x_trie:find(TableName, Tables) of
+    case trie:find(TableName, Tables) of
         {ok, TableValues} ->
             {reply,
              response(Request, {ok, TableModule:to_list(TableValues)}, State),
@@ -366,7 +366,7 @@ key_value({get, [I | _] = Table, Key},
                  table_module = TableModule} = State)
     when is_integer(I) ->
     TableName = Database ++ [$* | Table],
-    Response = case cloudi_x_trie:find(TableName, Tables) of
+    Response = case trie:find(TableName, Tables) of
         {ok, TableValues} ->
             case TableModule:find(Key, TableValues) of
                 {ok, Value} ->
@@ -384,7 +384,7 @@ key_value({put, [I | _] = Table, Key, Value},
                  table_module = TableModule} = State)
     when is_integer(I) ->
     TableName = Database ++ [$* | Table],
-    NewTables = cloudi_x_trie:update(TableName, fun(Old) ->
+    NewTables = trie:update(TableName, fun(Old) ->
             TableModule:store(Key, Value, Old)
         end, TableModule:store(Key, Value, TableModule:new()), Tables),
     {reply,

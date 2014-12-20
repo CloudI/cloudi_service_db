@@ -3,7 +3,7 @@ defmodule CloudIServiceDb do
 
   def project do
     [app: :cloudi_service_db,
-     version: "1.4.0-rc.4",
+     version: "1.4.0",
      language: :erlang,
      description: description,
      package: package,
@@ -11,9 +11,9 @@ defmodule CloudIServiceDb do
   end
 
   defp deps do
-    [{:cloudi_core, "~> 1.4.0-rc.4"},
-     {:trie, "~> 1.4.0-rc.4"},
-     {:uuid, "~> 1.4.0-rc.4", hex: :uuid_erl}]
+    [{:cloudi_core, "~> 1.4.0"},
+     {:trie, "~> 1.4.0"},
+     {:uuid, "~> 1.4.0", hex: :uuid_erl}]
   end
 
   defp description do

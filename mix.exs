@@ -24,7 +24,7 @@ defmodule CloudIServiceDb do
     [files: ~w(src doc rebar.config README.markdown),
      maintainers: ["Michael Truog"],
      licenses: ["BSD"],
-     links: %{"Website" => "http://cloudi.org",
+     links: %{"Website" => "https://cloudi.org",
               "GitHub" => "https://github.com/CloudI/" <>
                           "cloudi_service_db"}]
    end
